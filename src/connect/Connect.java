@@ -1,11 +1,11 @@
 package connect;
 
-import connect.frame.FrameBoard;
+import connect.frame.FrameConnect;
 import javafx.application.Application;
 
 public class Connect {
 
     public static void main(String[] args) {
-        Application.launch(FrameBoard.class);
+        Application.launch(FrameConnect.class);
     }
 }
