@@ -1,5 +1,7 @@
 package connect.util;
 
+import java.util.Arrays;
+
 public enum GameType {
 
     CONNECT4("ORIGINAL CONNECT 4"), POPOUT("PopOut"), POP10("Pop 10"), POWERUP("Power Up"), INAROW5("5-in-a-Row");
@@ -12,5 +14,9 @@ public enum GameType {
 
     public String getName() {
         return name;
+    }
+
+    public static GameType getGameType(String name){
+        return Arrays.stream(GameType.values()).filter(gameType -> gameType.getName().equals(name)).findAny().orElse(null);
     }
 }

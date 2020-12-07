@@ -22,15 +22,8 @@ public class ControllerMain implements EventHandler<ActionEvent> {
             if(page instanceof PageMain){
                 Node node = ((PageMain) page).getChildren().get(0);
 
-                if(node instanceof ComboBox){
-                    System.out.println(
-                            GameType.valueOf(
-                                    ((ComboBox<?>) node).getSelectionModel().getSelectedItem().toString()
-                            )
-                    );
-
-                    //FrameConnect.showedPage = new PageConnect();
-                }
+                if(node instanceof ComboBox)
+                    FrameConnect.showedPage = new PageConnect(GameType.getGameType(((ComboBox<?>) node).getSelectionModel().getSelectedItem().toString()));
             }
         }
     }
