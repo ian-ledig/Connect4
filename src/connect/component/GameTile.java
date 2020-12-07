@@ -1,5 +1,6 @@
 package connect.component;
 
+import connect.controller.ControllerMain;
 import javafx.scene.shape.Circle;
 
 public class GameTile extends Circle {

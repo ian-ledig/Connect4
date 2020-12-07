@@ -1,7 +1,6 @@
 package connect.frame;
 
-import connect.component.GameGroup;
-import connect.frame.page.PageConnect;
+import connect.frame.page.Page;
 import connect.frame.page.PageMain;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -11,19 +10,21 @@ import javafx.stage.Stage;
 public class FrameConnect extends Application {
 
     public static final String TITLE = "Connect 4";
-
-    public static GameGroup showedPage;
+    public static final StackPane ROOT = new StackPane();
 
     @Override
     public void start(Stage stage) {
         stage.setTitle(TITLE);
 
-        StackPane root = new StackPane();
-        stage.setScene(new Scene(root,900, 600));
+        stage.setScene(new Scene(ROOT,900, 600));
         stage.setResizable(false);
         stage.show();
 
-        showedPage = new PageMain();
-        root.getChildren().add(this.showedPage);
+        setShowedPage(new PageMain());
+    }
+
+    public static void setShowedPage(Page showedPage) {
+        FrameConnect.ROOT.getChildren().clear();
+        FrameConnect.ROOT.getChildren().add(showedPage);
     }
 }

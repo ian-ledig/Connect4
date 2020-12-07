@@ -23,7 +23,7 @@ public class ControllerMain implements EventHandler<ActionEvent> {
                 Node node = ((PageMain) page).getChildren().get(0);
 
                 if(node instanceof ComboBox)
-                    FrameConnect.showedPage = new PageConnect(GameType.getGameType(((ComboBox<?>) node).getSelectionModel().getSelectedItem().toString()));
+                    FrameConnect.setShowedPage(new PageConnect(GameType.getGameType(((ComboBox<?>) node).getSelectionModel().getSelectedItem().toString())));
             }
         }
     }
