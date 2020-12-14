@@ -21,3 +21,7 @@ Le choix de ce framework a été fait pour sa simplicité de création et gestio
 - Ajout des différentes pages et du passage entre elles.
 - Création de différentes règles de jeu.
 - Génération de la grille de jeu. 
+
+##### 14/12/2020
+
+- Ajout de la possibilité de placer des jetons dans le grille.

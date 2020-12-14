@@ -3,14 +3,10 @@ package connect.frame.page;
 import connect.controller.ControllerMain;
 import connect.util.GameType;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,27 +19,30 @@ public class PageMain extends Page {
 
     @Override
     public void draw() throws FileNotFoundException {
+
+        ImageView logo = new ImageView(new Image(new FileInputStream(TEXTURE_LOGO)));
+        logo.setLayoutY(-520);
+        add(logo);
+
         ComboBox cbxGameType = new ComboBox<>();
-        cbxGameType.setLayoutY(-20);
+        cbxGameType.setLayoutX(185);
+        cbxGameType.setLayoutY(-230);
         cbxGameType.setPrefSize(180, 20);
         cbxGameType.setItems(
-            FXCollections.observableArrayList(
-                    Stream.of(GameType.values())
-                    .map(GameType::getName)
-                    .collect(Collectors.toList())
-            )
+                FXCollections.observableArrayList(
+                        Stream.of(GameType.values())
+                                .map(GameType::getName)
+                                .collect(Collectors.toList())
+                )
         );
         cbxGameType.getSelectionModel().select(0);
         add(cbxGameType);
 
         Button btnPlay = new Button("Play");
-        btnPlay.setLayoutY(20);
+        btnPlay.setLayoutX(185);
+        btnPlay.setLayoutY(-190);
         btnPlay.setPrefSize(180, 20);
-
-        btnPlay.setOnAction(new ControllerMain());
+        btnPlay.setOnAction(ControllerMain::play);
         add(btnPlay);
-
-        ImageView logo = new ImageView(new Image(new FileInputStream(TEXTURE_LOGO)));
-        add(logo);
     }
 }
