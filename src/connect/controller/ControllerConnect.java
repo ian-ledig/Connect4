@@ -1,6 +1,7 @@
 package connect.controller;
 
 import connect.component.GameTile;
+import connect.frame.page.Page;
 import connect.frame.page.PageConnect;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -32,19 +33,14 @@ public class ControllerConnect {
                 GameTile tile = PageConnect.gameTiles[indexColumn][indexTile];
                 if(tile.getFill().equals(Color.WHITE)){
                     end = true;
-
-                    if(PageConnect.currentPlayer == 0){
-                        PageConnect.currentPlayer = 1;
-                        tile.setFill(Color.RED);
-                    }
-                    else{
-                        PageConnect.currentPlayer = 0;
-                        tile.setFill(Color.YELLOW);
-                    }
+                    tile.setFill(PageConnect.getCurrentColor());
+                    PageConnect.switchPlayer();
+                    System.out.println("Setting " + indexColumn + ", " + indexTile);
                 }
                 else
                     indexTile--;
             }
+            PageConnect.checkForWinner(indexColumn, indexTile);
         }
     }
 }
