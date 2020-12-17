@@ -25,3 +25,8 @@ Le choix de ce framework a été fait pour sa simplicité de création et gestio
 ##### 14/12/2020
 
 - Ajout de la possibilité de placer des jetons dans le grille.
+
+##### 17/12/2020
+
+- Ajout de la détection de vitoire.
+- Ajout du scoring.
