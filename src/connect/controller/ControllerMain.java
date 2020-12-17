@@ -18,10 +18,11 @@ public class ControllerMain {
             Node page = ((Button) button).getParent();
 
             if(page instanceof PageMain){
-                Node node = ((PageMain) page).getChildren().get(1);
+                PageMain pageMain = (PageMain) page;
+                Node node = pageMain.getChildren().get(1);
 
                 if(node instanceof ComboBox)
-                    FrameConnect.setShowedPage(new PageConnect(GameType.getGameType(((ComboBox<?>) node).getSelectionModel().getSelectedItem().toString())));
+                    FrameConnect.setShowedPage(new PageConnect(GameType.getGameType(((ComboBox<?>) node).getSelectionModel().getSelectedItem().toString()), Integer.parseInt(pageMain.txfScoreToWin.getText())));
             }
         }
     }

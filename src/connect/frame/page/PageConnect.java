@@ -16,16 +16,17 @@ public class PageConnect extends Page {
     public static final String TEXTURE_BOARD = "src/resources/board.jpg";
     public static final int MAX_COLUMN = 7;
     public static final int MAX_ROW = 6;
+    public static final Game GAME = new Game();
 
     public final GameType gameType;
-    public final Game game;
+    public final int pointsToWin;
 
     public static GameTile[][] gameTiles = new GameTile[7][6];
     public static int currentPlayer = 0;
 
-    public PageConnect(GameType gameType){
+    public PageConnect(GameType gameType, int pointsToWin){
         this.gameType = gameType;
-        this.game = new Game();
+        this.pointsToWin = pointsToWin;
     }
 
     @Override
@@ -45,8 +46,13 @@ public class PageConnect extends Page {
     }
 
     public static void checkForWinner(int column, int row){
-        if(PageConnect.isWin(column, row))
-            System.out.println("WIN !");
+        if(PageConnect.isWin(column, row)){
+            if(getCurrentColor().equals(Color.RED))
+                GAME.incrementRed();
+            else
+                GAME.incrementYellow();
+            System.out.println(GAME.getPoints());
+        }
     }
 
     public static boolean isWin(int column, int row){
