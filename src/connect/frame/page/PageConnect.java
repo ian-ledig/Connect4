@@ -4,6 +4,8 @@ import connect.component.GameTile;
 import connect.controller.ControllerConnect;
 import connect.util.Game;
 import connect.util.GameType;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -19,20 +21,35 @@ public class PageConnect extends Page {
     public static final Game GAME = new Game();
 
     public final GameType gameType;
-    public final int pointsToWin;
+
+    public static int pointsToWin;
+    public static boolean gameIsEnded = false;
+
+    public static Label lblPoints;
 
     public static GameTile[][] gameTiles = new GameTile[7][6];
     public static int currentPlayer = 0;
 
     public PageConnect(GameType gameType, int pointsToWin){
         this.gameType = gameType;
-        this.pointsToWin = pointsToWin;
+        PageConnect.pointsToWin = pointsToWin;
     }
 
     @Override
     public void draw() throws FileNotFoundException {
-        ImageView board = new ImageView(new Image (new FileInputStream(TEXTURE_BOARD)));
-        add(board);
+        ImageView imvBoard = new ImageView(new Image (new FileInputStream(TEXTURE_BOARD)));
+        add(imvBoard);
+
+        lblPoints = new Label("Red : 0\nYellow : 0");
+        lblPoints.setLayoutX(-80);
+        lblPoints.setLayoutY(50);
+        add(lblPoints);
+
+        Button btnQuit = new Button("Main menu");
+        btnQuit.setLayoutX(-80);
+        btnQuit.setLayoutY(120);
+        btnQuit.setOnMouseClicked(ControllerConnect::goToMainMenu);
+        add(btnQuit);
 
         for (int i = 0; i < MAX_COLUMN; i++){
             for(int e = 0; e < MAX_ROW; e++){
@@ -47,12 +64,37 @@ public class PageConnect extends Page {
 
     public static void checkForWinner(int column, int row){
         if(PageConnect.isWin(column, row)){
-            if(getCurrentColor().equals(Color.RED))
+            if(gameTiles[column][row].getFill().equals(Color.RED))
                 GAME.incrementRed();
             else
                 GAME.incrementYellow();
-            System.out.println(GAME.getPoints());
+
+            int redPoints = GAME.getPoints()[0];
+            int yellowPoints = GAME.getPoints()[1];
+
+            lblPoints.setText("Red : " + redPoints +"\nYellow : " + yellowPoints);
+
+            if(redPoints == PageConnect.pointsToWin){
+                displayWinner(0);
+            }
+            else if(yellowPoints == PageConnect.pointsToWin){
+                displayWinner(1);
+            }
+            else {
+                for (int i = 0; i < gameTiles.length; i++) {
+                    for (int e = 0; e < gameTiles[i].length; e++) {
+                        gameTiles[i][e].setFill(Color.WHITE);
+                    }
+                }
+            }
         }
+    }
+
+    public static void displayWinner(int player){
+        gameIsEnded = true;
+        lblPoints.setText(lblPoints.getText() + "\n" + ((player == 0) ? "Red" : "Yellow") + " player wins !");
+
+
     }
 
     public static boolean isWin(int column, int row){
