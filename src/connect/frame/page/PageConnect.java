@@ -18,25 +18,25 @@ public class PageConnect extends Page {
     public static final String TEXTURE_BOARD = "src/resources/board.jpg";
     public static final int MAX_COLUMN = 7;
     public static final int MAX_ROW = 6;
-    public static final Game GAME = new Game();
 
-    public final GameType gameType;
+    private final Game game = new Game();
+    private final GameType gameType;
+    private final int pointsToWin;
 
-    public static int pointsToWin;
-    public static boolean gameIsEnded = false;
-
-    public static Label lblPoints;
-
-    public static GameTile[][] gameTiles = new GameTile[7][6];
-    public static int currentPlayer = 0;
+    private boolean gameIsEnded = false;
+    private Label lblPoints;
+    private GameTile[][] gameTiles;
+    private int currentPlayer = 0;
 
     public PageConnect(GameType gameType, int pointsToWin){
         this.gameType = gameType;
-        PageConnect.pointsToWin = pointsToWin;
+        this.pointsToWin = pointsToWin;
     }
 
     @Override
     public void draw() throws FileNotFoundException {
+        gameTiles = new GameTile[7][6];
+
         ImageView imvBoard = new ImageView(new Image (new FileInputStream(TEXTURE_BOARD)));
         add(imvBoard);
 
@@ -62,22 +62,22 @@ public class PageConnect extends Page {
         }
     }
 
-    public static void checkForWinner(int column, int row){
-        if(PageConnect.isWin(column, row)){
+    public void checkForWinner(int column, int row){
+        if(isWin(column, row)){
             if(gameTiles[column][row].getFill().equals(Color.RED))
-                GAME.incrementRed();
+                game.incrementRed();
             else
-                GAME.incrementYellow();
+                game.incrementYellow();
 
-            int redPoints = GAME.getPoints()[0];
-            int yellowPoints = GAME.getPoints()[1];
+            int redPoints = game.getPoints()[0];
+            int yellowPoints = game.getPoints()[1];
 
             lblPoints.setText("Red : " + redPoints +"\nYellow : " + yellowPoints);
 
-            if(redPoints == PageConnect.pointsToWin){
+            if(redPoints == pointsToWin){
                 displayWinner(0);
             }
-            else if(yellowPoints == PageConnect.pointsToWin){
+            else if(yellowPoints == pointsToWin){
                 displayWinner(1);
             }
             else {
@@ -90,14 +90,12 @@ public class PageConnect extends Page {
         }
     }
 
-    public static void displayWinner(int player){
+    public void displayWinner(int player){
         gameIsEnded = true;
         lblPoints.setText(lblPoints.getText() + "\n" + ((player == 0) ? "Red" : "Yellow") + " player wins !");
-
-
     }
 
-    public static boolean isWin(int column, int row){
+    public boolean isWin(int column, int row){
         boolean result = false;
 
         if(
@@ -111,7 +109,7 @@ public class PageConnect extends Page {
         return result;
     }
 
-    public static int getNeighborChipsHorizontally(int column, int row, int oldColumn){
+    public int getNeighborChipsHorizontally(int column, int row, int oldColumn){
         int correctChip = 1;
 
         final int previousColumn = column - 1;
@@ -126,7 +124,7 @@ public class PageConnect extends Page {
         return correctChip;
     }
 
-    public static int getNeighborChipsVertically(int column, int row, int oldRow){
+    public int getNeighborChipsVertically(int column, int row, int oldRow){
         int correctChip = 1;
 
         final int previousRow = row - 1;
@@ -141,7 +139,7 @@ public class PageConnect extends Page {
         return correctChip;
     }
 
-    public static int getNeighborChipsLeftDiagonal(int column, int row, int oldColumn, int oldRow){
+    public int getNeighborChipsLeftDiagonal(int column, int row, int oldColumn, int oldRow){
         int correctChip = 1;
 
         final int previousColumn = column - 1;
@@ -158,7 +156,7 @@ public class PageConnect extends Page {
         return correctChip;
     }
 
-    public static int getNeighborChipsRightDiagonal(int column, int row, int oldColumn, int oldRow){
+    public int getNeighborChipsRightDiagonal(int column, int row, int oldColumn, int oldRow){
         int correctChip = 1;
 
         final int previousColumn = column - 1;
@@ -175,11 +173,19 @@ public class PageConnect extends Page {
         return correctChip;
     }
 
-    public static Color getCurrentColor(){
+    public Color getCurrentColor(){
         return currentPlayer == 0 ? Color.RED : Color.YELLOW;
     }
 
-    public static void switchPlayer(){
+    public void switchPlayer(){
         currentPlayer = currentPlayer == 0 ? 1 : 0;
+    }
+
+    public boolean isGameIsEnded() {
+        return gameIsEnded;
+    }
+
+    public GameTile[][] getGameTiles() {
+        return gameTiles;
     }
 }
