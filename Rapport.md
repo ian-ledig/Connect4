@@ -30,3 +30,8 @@ Le choix de ce framework a été fait pour sa simplicité de création et gestio
 
 - Ajout de la détection de vitoire.
 - Ajout du scoring.
+
+##### 18/12/2020
+
+- Ajout du système de détection de fin de partie.
+- Amélioration du système de jeu.
