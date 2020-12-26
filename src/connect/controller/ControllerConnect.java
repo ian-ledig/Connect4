@@ -1,9 +1,11 @@
 package connect.controller;
 
+import connect.component.GameGrid;
 import connect.component.GameTile;
 import connect.frame.FrameConnect;
 import connect.frame.page.PageConnect;
 import connect.frame.page.PageMain;
+import connect.util.GameType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
@@ -21,36 +23,37 @@ public class ControllerConnect {
                 PageConnect pageConnect = (PageConnect) gameTile.getParent();
 
                 if(!pageConnect.isGameIsEnded()){
+                    GameGrid grid = pageConnect.getGrid();
+                    int indexColumn = grid.getColumn(gameTile);
 
-                    boolean end = false;
-                    int indexColumn = 0;
-                    int indexRow = 0;
-                    while(!end && indexRow <= 41){
-                        if(pageConnect.getGameTiles()[indexColumn][indexRow].equals(gameTile)){
-                            end = true;
+                    if(
+                            pageConnect.getGameType().equals(GameType.POPOUT) &&
+                            !gameTile.getFill().equals(Color.WHITE) &&
+                                    grid.getGameTile(indexColumn, GameGrid.ROW_NUMBER - 1).equals(gameTile)
+                    ){
+                        grid.getTiles()[indexColumn][0].setFill(Color.WHITE);
+                        for(int i = GameGrid.ROW_NUMBER - 1; i > 0; i--){
+                            grid.getTiles()[indexColumn][i].setFill(grid.getTiles()[indexColumn][i - 1].getFill());
+                            pageConnect.checkForWinner(indexColumn, i);
                         }
-                        else if(indexRow == 5 || indexRow == 11 || indexRow == 17 || indexRow == 23 || indexRow == 29 || indexRow == 35 || indexRow == 41){
-                            indexRow = 0;
-                            indexColumn++;
-                        }
-                        else
-                            indexRow++;
+                        pageConnect.switchPlayer();
                     }
-
-                    end = false;
-                    int indexTile = 5;
-                    while(!end && indexTile >= 0){
-                        GameTile tile = pageConnect.getGameTiles()[indexColumn][indexTile];
-                        if(tile.getFill().equals(Color.WHITE)){
-                            end = true;
-                            tile.setFill(pageConnect.getCurrentColor());
-                            pageConnect.switchPlayer();
-                            System.out.println("Setting " + indexColumn + ", " + indexTile);
+                    else {
+                        boolean end = false;
+                        int indexTile = GameGrid.ROW_NUMBER - 1;
+                        while(!end && indexTile >= 0){
+                            GameTile tile = grid.getGameTile(indexColumn, indexTile);
+                            if(tile.getFill().equals(Color.WHITE)){
+                                end = true;
+                                tile.setFill(pageConnect.getCurrentColor());
+                                pageConnect.switchPlayer();
+                            }
+                            else
+                                indexTile--;
                         }
-                        else
-                            indexTile--;
+                        if(indexTile >= 0)
+                            pageConnect.checkForWinner(indexColumn, indexTile);
                     }
-                    pageConnect.checkForWinner(indexColumn, indexTile);
                 }
             }
         }
