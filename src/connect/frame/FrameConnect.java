@@ -16,7 +16,7 @@ public class FrameConnect extends Application {
     public void start(Stage stage) {
         stage.setTitle(TITLE);
 
-        stage.setScene(new Scene(ROOT,900, 600));
+        stage.setScene(new Scene(ROOT,1100, 600));
         stage.setResizable(false);
         stage.show();
 

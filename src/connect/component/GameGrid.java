@@ -4,15 +4,18 @@ import connect.controller.ControllerConnect;
 import javafx.scene.paint.Color;
 
 public class GameGrid {
-    public static final int COLUMN_NUMBER = 7;
     public static final int ROW_NUMBER = 6;
+
+    private final int columnNumber;
 
     private GameTile[][] tiles;
 
-    public GameGrid(){
-        tiles = new GameTile[COLUMN_NUMBER][ROW_NUMBER];
+    public GameGrid(int columnNumber){
+        this.columnNumber = columnNumber;
 
-        for (int i = 0; i < COLUMN_NUMBER; i++){
+        tiles = new GameTile[this.columnNumber][ROW_NUMBER];
+
+        for (int i = 0; i < this.columnNumber; i++){
             for(int e = 0; e < ROW_NUMBER; e++){
                 GameTile tile = new GameTile(113 + i * 92, 73 + e * 91, 38);
                 tile.setFill(Color.WHITE);
@@ -50,5 +53,9 @@ public class GameGrid {
                 indexRow++;
         }
         return indexColumn;
+    }
+
+    public int getColumnNumber() {
+        return columnNumber;
     }
 }

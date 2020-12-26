@@ -35,3 +35,10 @@ Le choix de ce framework a été fait pour sa simplicité de création et gestio
 
 - Ajout du système de détection de fin de partie.
 - Amélioration du système de jeu.
+
+##### 26/12/2020
+
+- Modification du système de détection de victoire.
+- Ajout du mode de jeu Pop out.
+- Ajout du mode de jeu 5-in-a-row.
+- Ajout du mode de jeu Pop out & 5-in-a-row.

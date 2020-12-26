@@ -1,7 +1,6 @@
 package connect.frame.page;
 
 import connect.component.GameGrid;
-import connect.component.GameTile;
 import connect.controller.ControllerConnect;
 import connect.util.Game;
 import connect.util.GameType;
@@ -26,17 +25,30 @@ public class PageConnect extends Page {
     private Label lblPoints;
     private GameGrid grid;
     private int currentPlayer = 0;
+    private int chipsToWin = 4;
 
     public PageConnect(GameType gameType, int pointsToWin){
         this.gameType = gameType;
         this.pointsToWin = pointsToWin;
+
+        draw();
     }
 
     @Override
-    public void draw() throws FileNotFoundException {
-        grid = new GameGrid();
+    public void draw() {
+        if(gameType.equals(GameType.INAROW5) || gameType.equals(GameType.POPOUTINAROW5)){
+            grid = new GameGrid(9);
+            chipsToWin = 5;
+        }
+        else
+            grid = new GameGrid(7);
 
-        ImageView imvBoard = new ImageView(new Image (new FileInputStream(TEXTURE_BOARD)));
+        ImageView imvBoard = null;
+        try {
+            imvBoard = new ImageView(new Image(new FileInputStream(TEXTURE_BOARD)));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         add(imvBoard);
 
         lblPoints = new Label("Red : 0\nYellow : 0");
@@ -50,8 +62,10 @@ public class PageConnect extends Page {
         btnQuit.setOnMouseClicked(ControllerConnect::goToMainMenu);
         add(btnQuit);
 
-        for (int i = 0; i < GameGrid.COLUMN_NUMBER; i++) {
+        for (int i = 0; i < grid.getColumnNumber(); i++) {
             for (int e = 0; e < GameGrid.ROW_NUMBER; e++) {
+                if((gameType.equals(GameType.INAROW5) || gameType.equals(GameType.POPOUTINAROW5)) && (i == 0 || i == grid.getColumnNumber() - 1))
+                    grid.getGameTile(i, e).setFill(e % 2 == 0 ? Color.RED : Color.YELLOW);
                 add(grid.getGameTile(i, e));
             }
         }
@@ -95,10 +109,10 @@ public class PageConnect extends Page {
 
         if(
                 !grid.getTiles()[column][row].getFill().equals(Color.WHITE) && (
-                getNeighborChipsHorizontally(column, row, column) == 4 ||
-                getNeighborChipsVertically(column, row, row) == 4 ||
-                getNeighborChipsLeftDiagonal(column, row, column, row) == 4 ||
-                getNeighborChipsRightDiagonal(column, row, column, row) == 4
+                getNeighborChipsHorizontally(column, row, column) == chipsToWin ||
+                getNeighborChipsVertically(column, row, row) == chipsToWin ||
+                getNeighborChipsLeftDiagonal(column, row, column, row) == chipsToWin ||
+                getNeighborChipsRightDiagonal(column, row, column, row) == chipsToWin
         ))
             result = true;
 
@@ -114,7 +128,7 @@ public class PageConnect extends Page {
         if(column > 0 && previousColumn != oldColumn && grid.getGameTile(previousColumn, row).getFill().equals(grid.getGameTile(column, row).getFill()))
             correctChip += getNeighborChipsHorizontally(previousColumn, row, column);
 
-        if(column < GameGrid.COLUMN_NUMBER - 1 && nextColumn != oldColumn && grid.getGameTile(nextColumn, row).getFill().equals(grid.getGameTile(column, row).getFill()))
+        if(column < grid.getColumnNumber() - 1 && nextColumn != oldColumn && grid.getGameTile(nextColumn, row).getFill().equals(grid.getGameTile(column, row).getFill()))
             correctChip += getNeighborChipsHorizontally(nextColumn, row, column);
 
         return correctChip;
@@ -146,7 +160,7 @@ public class PageConnect extends Page {
         if(column > 0 && row > 0 && previousColumn != oldColumn && previousRow != oldRow && grid.getGameTile(previousColumn, previousRow).getFill().equals(grid.getGameTile(column, row).getFill()))
             correctChip += getNeighborChipsLeftDiagonal(previousColumn, previousRow, column, row);
 
-        if(column < GameGrid.COLUMN_NUMBER - 1 && row < GameGrid.ROW_NUMBER - 1 && nextColumn != oldColumn && nextRow != oldRow && grid.getGameTile(nextColumn, nextRow).getFill().equals(grid.getGameTile(column, row).getFill()))
+        if(column < grid.getColumnNumber() - 1 && row < GameGrid.ROW_NUMBER - 1 && nextColumn != oldColumn && nextRow != oldRow && grid.getGameTile(nextColumn, nextRow).getFill().equals(grid.getGameTile(column, row).getFill()))
             correctChip += getNeighborChipsLeftDiagonal(nextColumn, nextRow, column, row);
 
         return correctChip;
@@ -163,7 +177,7 @@ public class PageConnect extends Page {
         if(column > 0 && row < GameGrid.ROW_NUMBER - 1 && previousColumn != oldColumn && nextRow != oldRow && grid.getGameTile(previousColumn, nextRow).getFill().equals(grid.getGameTile(column, row).getFill()))
             correctChip += getNeighborChipsRightDiagonal(previousColumn, nextRow, column, row);
 
-        if(column < GameGrid.COLUMN_NUMBER - 1 && row > 0 && nextColumn != oldColumn && previousRow != oldRow && grid.getGameTile(nextColumn, previousRow).getFill().equals(grid.getGameTile(column, row).getFill()))
+        if(column < grid.getColumnNumber() - 1 && row > 0 && nextColumn != oldColumn && previousRow != oldRow && grid.getGameTile(nextColumn, previousRow).getFill().equals(grid.getGameTile(column, row).getFill()))
             correctChip += getNeighborChipsRightDiagonal(nextColumn, previousRow, column, row);
 
         return correctChip;

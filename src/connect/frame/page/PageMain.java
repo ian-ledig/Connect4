@@ -19,11 +19,20 @@ public class PageMain extends Page {
     public static final String TEXTURE_LOGO = "src/resources/logo.png";
     public TextField txfScoreToWin;
 
-    @Override
-    public void draw() throws FileNotFoundException {
+    public PageMain(){
+        draw();
+    }
 
-        ImageView logo = new ImageView(new Image(new FileInputStream(TEXTURE_LOGO)));
-        logo.setLayoutY(-520);
+    @Override
+    public void draw() {
+
+        ImageView logo = null;
+        try {
+            logo = new ImageView(new Image(new FileInputStream(TEXTURE_LOGO)));
+            logo.setLayoutY(-520);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         add(logo);
 
         ComboBox cbxGameType = new ComboBox<>();

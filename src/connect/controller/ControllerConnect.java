@@ -23,11 +23,12 @@ public class ControllerConnect {
                 PageConnect pageConnect = (PageConnect) gameTile.getParent();
 
                 if(!pageConnect.isGameIsEnded()){
+                    GameType gameType = pageConnect.getGameType();
                     GameGrid grid = pageConnect.getGrid();
                     int indexColumn = grid.getColumn(gameTile);
 
                     if(
-                            pageConnect.getGameType().equals(GameType.POPOUT) &&
+                            (gameType.equals(GameType.POPOUT) || gameType.equals(GameType.POPOUTINAROW5)) &&
                             !gameTile.getFill().equals(Color.WHITE) &&
                                     grid.getGameTile(indexColumn, GameGrid.ROW_NUMBER - 1).equals(gameTile)
                     ){
