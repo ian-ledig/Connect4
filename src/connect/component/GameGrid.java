@@ -55,6 +55,30 @@ public class GameGrid {
         return indexColumn;
     }
 
+    public boolean isFull(){
+        boolean result = true;
+
+        int indexColumn = 0;
+        while(indexColumn < tiles.length && result) {
+            int indexRow = 0;
+            while (indexRow < tiles[indexColumn].length && result) {
+                if (tiles[indexColumn][indexRow].getFill().equals(Color.WHITE))
+                    result = false;
+                else
+                    indexRow++;
+            }
+            indexColumn++;
+        }
+
+        return result;
+    }
+
+    public void resetGrid(){
+        for (int i = 0; i < this.columnNumber; i++)
+            for (int e = 0; e < ROW_NUMBER; e++)
+                tiles[i][e].setFill(Color.WHITE);
+    }
+
     public int getColumnNumber() {
         return columnNumber;
     }

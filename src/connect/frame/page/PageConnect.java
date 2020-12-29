@@ -90,13 +90,11 @@ public class PageConnect extends Page {
                 displayWinner(1);
             }
             else {
-                for (int i = 0; i < 7; i++) {
-                    for (int e = 0; e < 6; e++) {
-                        grid.getGameTile(i, e).setFill(Color.WHITE);
-                    }
-                }
+                grid.resetGrid();
             }
         }
+        else if(grid.isFull())
+                grid.resetGrid();
     }
 
     public void displayWinner(int player){
