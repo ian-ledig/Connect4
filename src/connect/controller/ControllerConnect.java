@@ -5,6 +5,7 @@ import connect.component.GameTile;
 import connect.frame.FrameConnect;
 import connect.frame.page.PageConnect;
 import connect.frame.page.PageMain;
+import connect.gamerule.GameRule;
 import connect.util.GameType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -23,13 +24,11 @@ public class ControllerConnect {
                 PageConnect pageConnect = (PageConnect) gameTile.getParent();
 
                 if(!pageConnect.isGameIsEnded()){
-                    GameType gameType = pageConnect.getGameType();
                     GameGrid grid = pageConnect.getGrid();
                     int indexColumn = grid.getColumn(gameTile);
 
                     if(
-                            (gameType.equals(GameType.POPOUT) || gameType.equals(GameType.POPOUTINAROW5)) &&
-                            !gameTile.getFill().equals(Color.WHITE) &&
+                            pageConnect.getGameRule().isRemoveChip() && !gameTile.getFill().equals(Color.WHITE) &&
                                     grid.getGameTile(indexColumn, GameGrid.ROW_NUMBER - 1).equals(gameTile)
                     ){
                         grid.getTiles()[indexColumn][0].setFill(Color.WHITE);

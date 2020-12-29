@@ -21,8 +21,13 @@ public class ControllerMain {
                 PageMain pageMain = (PageMain) page;
                 Node node = pageMain.getChildren().get(1);
 
-                if(node instanceof ComboBox)
-                    FrameConnect.setShowedPage(new PageConnect(GameType.getGameType(((ComboBox<?>) node).getSelectionModel().getSelectedItem().toString()), Integer.parseInt(pageMain.txfScoreToWin.getText())));
+                if(node instanceof ComboBox) {
+                    try {
+                        FrameConnect.setShowedPage(new PageConnect(GameType.getGameType(((ComboBox<?>) node).getSelectionModel().getSelectedItem().toString()), Integer.parseInt(pageMain.txfScoreToWin.getText())));
+                    } catch (IllegalAccessException | InstantiationException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }

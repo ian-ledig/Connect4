@@ -2,6 +2,7 @@ package connect.frame.page;
 
 import connect.component.GameGrid;
 import connect.controller.ControllerConnect;
+import connect.gamerule.GameRule;
 import connect.util.Game;
 import connect.util.GameType;
 import javafx.scene.control.Button;
@@ -18,30 +19,23 @@ public class PageConnect extends Page {
     public static final String TEXTURE_BOARD = "src/resources/board.jpg";
 
     private final Game game = new Game();
-    private final GameType gameType;
+    private final GameRule gameRule;
     private final int pointsToWin;
 
     private boolean gameIsEnded = false;
     private Label lblPoints;
     private GameGrid grid;
     private int currentPlayer = 0;
-    private int chipsToWin = 4;
 
-    public PageConnect(GameType gameType, int pointsToWin){
-        this.gameType = gameType;
+    public PageConnect(GameType gameType, int pointsToWin) throws IllegalAccessException, InstantiationException {
+        this.gameRule = gameType.getGameRule().newInstance();
         this.pointsToWin = pointsToWin;
-
         draw();
     }
 
     @Override
     public void draw() {
-        if(gameType.equals(GameType.INAROW5) || gameType.equals(GameType.POPOUTINAROW5)){
-            grid = new GameGrid(9);
-            chipsToWin = 5;
-        }
-        else
-            grid = new GameGrid(7);
+        grid = new GameGrid(gameRule.getColumnNumber());
 
         ImageView imvBoard = null;
         try {
@@ -62,13 +56,12 @@ public class PageConnect extends Page {
         btnQuit.setOnMouseClicked(ControllerConnect::goToMainMenu);
         add(btnQuit);
 
-        for (int i = 0; i < grid.getColumnNumber(); i++) {
+        for (int i = 0; i < grid.getColumnNumber(); i++)
             for (int e = 0; e < GameGrid.ROW_NUMBER; e++) {
-                if((gameType.equals(GameType.INAROW5) || gameType.equals(GameType.POPOUTINAROW5)) && (i == 0 || i == grid.getColumnNumber() - 1))
+                if(gameRule.isSliders() && (i == 0 || i == grid.getColumnNumber() - 1))
                     grid.getGameTile(i, e).setFill(e % 2 == 0 ? Color.RED : Color.YELLOW);
                 add(grid.getGameTile(i, e));
             }
-        }
     }
 
     public void checkForWinner(int column, int row){
@@ -104,6 +97,7 @@ public class PageConnect extends Page {
 
     public boolean isWin(int column, int row){
         boolean result = false;
+        int chipsToWin = gameRule.getChipsToWin();
 
         if(
                 !grid.getTiles()[column][row].getFill().equals(Color.WHITE) && (
@@ -197,7 +191,7 @@ public class PageConnect extends Page {
         return grid;
     }
 
-    public GameType getGameType() {
-        return gameType;
+    public GameRule getGameRule() {
+        return gameRule;
     }
 }
