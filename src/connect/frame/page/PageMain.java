@@ -53,7 +53,7 @@ public class PageMain extends Page {
         txfScoreToWin.setLayoutX(185);
         txfScoreToWin.setLayoutY(-190);
         txfScoreToWin.setPrefSize(180, 20);
-        txfScoreToWin.setText("1");
+        txfScoreToWin.setText("10");
         add(txfScoreToWin);
 
         Button btnPlay = new Button("Play");

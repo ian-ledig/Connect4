@@ -28,21 +28,51 @@ public class ControllerConnect {
                     int indexColumn = grid.getColumn(gameTile);
 
                     if(
-                            pageConnect.getGameRule().isRemoveChip() && !gameTile.getFill().equals(Color.WHITE) &&
+                            pageConnect.getGameRule().isRemoveChip() && pageConnect.isCanRemoveChip() && !gameTile.getFill().equals(Color.WHITE) &&
                                     grid.getGameTile(indexColumn, GameGrid.ROW_NUMBER - 1).equals(gameTile)
                     ){
-                        grid.getTiles()[indexColumn][0].setFill(Color.WHITE);
-                        for(int i = GameGrid.ROW_NUMBER - 1; i > 0; i--){
-                            grid.getTiles()[indexColumn][i].setFill(grid.getTiles()[indexColumn][i - 1].getFill());
-                            pageConnect.checkForWinner(indexColumn, i);
+                        boolean isSameColor = gameTile.getFill().equals(pageConnect.getCurrentColor());
+                        if(isSameColor){
+                            boolean isWin = false;
+
+                            if(pageConnect.getGameRule().isFillGrid()){
+                                if(isSameColor && pageConnect.isWin(indexColumn, GameGrid.ROW_NUMBER - 1))
+                                    pageConnect.checkForWinner(gameTile);
+                                else{
+                                    pageConnect.switchPlayer();
+                                    pageConnect.setCanRemoveChip(false);
+                                }
+                            }
+
+                            for(int i = GameGrid.ROW_NUMBER - 1; i > 0; i--){
+                                grid.getTiles()[indexColumn][i].setFill(grid.getTiles()[indexColumn][i - 1].getFill());
+                                if(!pageConnect.getGameRule().isFillGrid()){
+                                    if(!isWin && pageConnect.isWin(indexColumn, i)){
+                                        isWin = true;
+                                        pageConnect.checkForWinner(gameTile);
+                                    }
+                                }
+                            }
+                            grid.getTiles()[indexColumn][0].setFill(Color.WHITE);
+                            pageConnect.switchPlayer();
                         }
-                        pageConnect.switchPlayer();
+                        else{
+                            boolean thereIsCurrentPlayerColor = false;
+                            for(int i = 0; i < grid.getColumnNumber(); i++){
+                                if(grid.getTiles()[i][GameGrid.ROW_NUMBER - 1].getFill().equals(pageConnect.getCurrentColor()))
+                                    thereIsCurrentPlayerColor = true;
+                            }
+
+                            if(!thereIsCurrentPlayerColor)
+                                pageConnect.switchPlayer();
+                        }
                     }
-                    else {
+                    else if(!pageConnect.getGameRule().isFillGrid() || !pageConnect.isCanRemoveChip()){
                         boolean end = false;
                         int indexTile = GameGrid.ROW_NUMBER - 1;
+                        GameTile tile = null;
                         while(!end && indexTile >= 0){
-                            GameTile tile = grid.getGameTile(indexColumn, indexTile);
+                            tile = grid.getGameTile(indexColumn, indexTile);
                             if(tile.getFill().equals(Color.WHITE)){
                                 end = true;
                                 tile.setFill(pageConnect.getCurrentColor());
@@ -51,8 +81,9 @@ public class ControllerConnect {
                             else
                                 indexTile--;
                         }
-                        if(indexTile >= 0)
-                            pageConnect.checkForWinner(indexColumn, indexTile);
+                        if(!pageConnect.getGameRule().isFillGrid() && indexTile >= 0 && pageConnect.isWin(indexColumn, indexTile))
+                            pageConnect.checkForWinner(tile);
+                        pageConnect.setCanRemoveChip(true);
                     }
                 }
             }

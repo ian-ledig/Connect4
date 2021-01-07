@@ -1,6 +1,7 @@
 package connect.frame.page;
 
 import connect.component.GameGrid;
+import connect.component.GameTile;
 import connect.controller.ControllerConnect;
 import connect.gamerule.GameRule;
 import connect.util.Game;
@@ -23,6 +24,7 @@ public class PageConnect extends Page {
     private final int pointsToWin;
 
     private boolean gameIsEnded = false;
+    private boolean canRemoveChip = true;
     private Label lblPoints;
     private GameGrid grid;
     private int currentPlayer = 0;
@@ -35,7 +37,7 @@ public class PageConnect extends Page {
 
     @Override
     public void draw() {
-        grid = new GameGrid(gameRule.getColumnNumber());
+        grid = new GameGrid(gameRule.getColumnNumber(), gameRule.isFillGrid());
 
         ImageView imvBoard = null;
         try {
@@ -64,30 +66,28 @@ public class PageConnect extends Page {
             }
     }
 
-    public void checkForWinner(int column, int row){
-        if(isWin(column, row)){
-            if(grid.getGameTile(column, row).getFill().equals(Color.RED))
-                game.incrementRed();
-            else
-                game.incrementYellow();
+    public void checkForWinner(GameTile gameTile){
+        if(gameTile.getFill().equals(Color.RED))
+            game.incrementRed();
+        else
+            game.incrementYellow();
 
-            int redPoints = game.getPoints()[0];
-            int yellowPoints = game.getPoints()[1];
+        int redPoints = game.getPoints()[0];
+        int yellowPoints = game.getPoints()[1];
 
-            lblPoints.setText("Red : " + redPoints +"\nYellow : " + yellowPoints);
+        lblPoints.setText("Red : " + redPoints +"\nYellow : " + yellowPoints);
 
-            if(redPoints == pointsToWin){
-                displayWinner(0);
-            }
-            else if(yellowPoints == pointsToWin){
-                displayWinner(1);
-            }
-            else {
-                grid.resetGrid();
-            }
+        if(redPoints == pointsToWin){
+            displayWinner(0);
         }
-        else if(grid.isFull())
-                grid.resetGrid();
+        else if(yellowPoints == pointsToWin){
+            displayWinner(1);
+        }
+        else if(!gameRule.isFillGrid() && grid.isFull())
+            grid.resetGrid();
+
+        if(!gameRule.isFillGrid())
+            grid.resetGrid();
     }
 
     public void displayWinner(int player){
@@ -101,10 +101,10 @@ public class PageConnect extends Page {
 
         if(
                 !grid.getTiles()[column][row].getFill().equals(Color.WHITE) && (
-                getNeighborChipsHorizontally(column, row, column) == chipsToWin ||
-                getNeighborChipsVertically(column, row, row) == chipsToWin ||
-                getNeighborChipsLeftDiagonal(column, row, column, row) == chipsToWin ||
-                getNeighborChipsRightDiagonal(column, row, column, row) == chipsToWin
+                getNeighborChipsHorizontally(column, row, column) >= chipsToWin ||
+                getNeighborChipsVertically(column, row, row) >= chipsToWin ||
+                getNeighborChipsLeftDiagonal(column, row, column, row) >= chipsToWin ||
+                getNeighborChipsRightDiagonal(column, row, column, row) >= chipsToWin
         ))
             result = true;
 
@@ -185,6 +185,14 @@ public class PageConnect extends Page {
 
     public boolean isGameIsEnded() {
         return gameIsEnded;
+    }
+
+    public boolean isCanRemoveChip() {
+        return canRemoveChip;
+    }
+
+    public void setCanRemoveChip(boolean canRemoveChip) {
+        this.canRemoveChip = canRemoveChip;
     }
 
     public GameGrid getGrid() {

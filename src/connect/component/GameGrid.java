@@ -10,15 +10,34 @@ public class GameGrid {
 
     private GameTile[][] tiles;
 
-    public GameGrid(int columnNumber){
+    public GameGrid(int columnNumber, boolean isFill){
         this.columnNumber = columnNumber;
+
+        // Usefull to fill the grid with chips
+        int redChipCount = columnNumber * ROW_NUMBER / 2;
+        int yellowChipCount = columnNumber * ROW_NUMBER / 2;
 
         tiles = new GameTile[this.columnNumber][ROW_NUMBER];
 
         for (int i = 0; i < this.columnNumber; i++){
             for(int e = 0; e < ROW_NUMBER; e++){
                 GameTile tile = new GameTile(113 + i * 92, 73 + e * 91, 38);
-                tile.setFill(Color.WHITE);
+
+                Color tileColor = Color.WHITE;
+                if(isFill) {
+
+                    if ((int)(Math.random() * 2) == 1 && redChipCount != 0) {
+                        redChipCount--;
+                        tileColor = Color.RED;
+                    } else if (yellowChipCount != 0) {
+                        yellowChipCount--;
+                        tileColor = Color.YELLOW;
+                    }
+                    else
+                        tileColor = Color.RED;
+                }
+                tile.setFill(tileColor);
+
                 tile.setOnMouseClicked(ControllerConnect::addChips);
                 setTile(i, e, tile);
             }

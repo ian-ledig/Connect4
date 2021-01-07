@@ -42,3 +42,7 @@ Le choix de ce framework a été fait pour sa simplicité de création et gestio
 - Ajout du mode de jeu Pop out.
 - Ajout du mode de jeu 5-in-a-row.
 - Ajout du mode de jeu Pop out & 5-in-a-row.
+
+#### 07/01/2021
+
+- Ajout du Pop10.
