@@ -8,5 +8,6 @@
 /httpRequests/
 
 .idea/
+.vscode/
 out/
 a31-project.iml
