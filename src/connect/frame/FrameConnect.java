@@ -23,6 +23,10 @@ public class FrameConnect extends Application {
         setShowedPage(new PageMain());
     }
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     public static void setShowedPage(Page showedPage) {
         FrameConnect.ROOT.getChildren().clear();
         FrameConnect.ROOT.getChildren().add(showedPage);
