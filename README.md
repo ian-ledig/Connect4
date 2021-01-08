@@ -26,6 +26,13 @@ Voici quelques explication concernant l'ajout de mode de jeu.
 - Ajouter un élément en y renseignant (en paramètres), le nom de la règle qui sera affiché au menu principal et la classe créée précédemment.
 - Ainsi, votre règle a été ajouté et est directement disponible en jeu.
 
+### Décisions
+
+Nous avons décidé d'utiliser JavaFX car ce Framework permet une meilleure manipulation des éléments graphiques.
+
+Au début de la conception du jeu, nous avons décidé de simplement renseigner le nom du jeu dans l'énumération GameType pour ensuite ajouter des conditions dans le code du déroulement de la partie en fonction de la règle en cours.
+Finalement, nous avons changé ce système en créant une classe par règle dans le but d'avoir une meilleure visibilité de ses paramètres mais aussi pour éviter d'avoir à modifier constamment les conditions code du déroulement de la partie.
+
 #### Auteurs
 
 - [BRUMBTER Robin](https://git.unistra.fr/rbrumbter)
