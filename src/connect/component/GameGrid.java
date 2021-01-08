@@ -93,7 +93,7 @@ public class GameGrid {
     }
 
     public void resetGrid(){
-        for (int i = 0; i < this.columnNumber; i++)
+        for (int i = this.columnNumber == 7 ? 0 : 1; i < (this.columnNumber == 7 ? 7 : 8); i++)
             for (int e = 0; e < ROW_NUMBER; e++)
                 tiles[i][e].setFill(Color.WHITE);
     }
